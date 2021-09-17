@@ -2,7 +2,7 @@
   "name": "pr_checker",
   "version": "1.0.0",
   "description": "Simple app to check open PRs and commits",
-  "main": "src/index.ts",
+  "main": "src/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "gts lint",
@@ -12,7 +12,7 @@
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint",
-    "serve-dev": "nodemon src/index.ts"
+    "serve-dev": "nodemon src/server.ts"
   },
   "author": "Jeff Ruder",
   "license": "MIT",
