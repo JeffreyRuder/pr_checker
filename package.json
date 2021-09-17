@@ -1,0 +1,11 @@
+{
+  "name": "pr_checker",
+  "version": "1.0.0",
+  "description": "Simple app to check open PRs and commits",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jeff Ruder",
+  "license": "MIT"
+}
