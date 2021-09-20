@@ -39,5 +39,6 @@ This project uses [Google GTS](https://github.com/google/gts) for linting. Revie
 * Add metadata to responses (e.g. total number of PRs)
 * Improve error handling to provide more specific error messages for different scenarios
 * Add apiDoc or a similar API documentation generation tool
+* Implement a request logging strategy
 * Add an authentication strategy to allow for querying private repos
 * If the API will become more complicated, consider expanding the `pull_requests.ts` code into a controller class
