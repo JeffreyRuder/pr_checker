@@ -1,7 +1,7 @@
 import superagent, {Response} from 'superagent';
 
-const githubUrl = 'https://api.github.com';
-interface PullRequest {
+export const githubUrl = 'https://api.github.com';
+export interface PullRequest {
   number: number;
   html_url: string;
   commits?: number;
@@ -13,7 +13,7 @@ type CommitCountProps = {
   pullNumber: number;
 };
 
-export const githubFetch = async (url: string): Promise<Response> => {
+const githubFetch = async (url: string): Promise<Response> => {
   return superagent
     .get(url)
     .accept('application/vnd.github.v3+json')
@@ -42,7 +42,6 @@ export const getPullRequests = async (
   const url = `${githubUrl}/repos/${owner}/${name}/pulls?state=open`;
   const response = await githubFetch(url);
   const openPullRequests: PullRequest[] = response.body;
-
   if (openPullRequests.length === 0) {
     return openPullRequests;
   }

@@ -1,7 +1,8 @@
 import request from 'supertest';
 
 import app from './app';
-import {getPullRequests} from './pull_requests';
+import {HttpException} from './exceptions/exceptions';
+import {getPullRequests, PullRequest} from './pull_requests';
 
 jest.mock('./pull_requests');
 const mockGH = getPullRequests as jest.MockedFunction<typeof getPullRequests>;
@@ -27,6 +28,31 @@ describe('/pull_requests', () => {
     expect(mockGH).toHaveBeenCalledWith('test_owner_name', 'cool_repo');
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(testData);
+  });
+
+  it('should respond 200 to GET with owner and name even when data is empty', async () => {
+    const testData: PullRequest[] = [];
+    mockGH.mockResolvedValueOnce(testData);
+    const response = await request(app).get(
+      '/pull_requests/owner/test_owner_name/name/cool_repo'
+    );
+    expect(mockGH).toHaveBeenCalledTimes(1);
+    expect(mockGH).toHaveBeenCalledWith('test_owner_name', 'cool_repo');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(testData);
+  });
+
+  it('should respond 404 when calls to GitHub result in a 404 error ', async () => {
+    mockGH.mockImplementationOnce(() => {
+      throw new HttpException(404, 'not found');
+    });
+    const response = await request(app).get(
+      '/pull_requests/owner/test_owner_name/name/cool_repo'
+    );
+    expect(mockGH).toHaveBeenCalledTimes(1);
+    expect(mockGH).toHaveBeenCalledWith('test_owner_name', 'cool_repo');
+    expect(response.statusCode).toBe(404);
+    expect(response.text).toEqual('not found');
   });
 
   it('should respond 400 to GET without owner or name', async () => {
