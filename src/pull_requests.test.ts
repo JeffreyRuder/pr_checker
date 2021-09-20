@@ -39,7 +39,7 @@ describe('getPullRequests', () => {
     });
   });
 
-  it('results in an error when github responds with a 404 code', async () => {
+  it('results in an error when github cannot find the repo', async () => {
     nock(githubUrl)
       .get('/repos/test_owner/test_name/pulls?state=open')
       .reply(404, {message: 'Not Found'});
@@ -49,7 +49,24 @@ describe('getPullRequests', () => {
     ).rejects.toThrowError(new HttpException(404, 'Not Found'));
   });
 
-  it('results in an error when github responds with a 403 code', async () => {
+  it('results in an error when github finds the repo, but not one of the PRs', async () => {
+    nock(githubUrl)
+      .get('/repos/test_owner/test_name/pulls?state=open')
+      .reply(200, testPulls);
+    nock(githubUrl)
+      .get(uri => uri.includes('/repos/test_owner/test_name/pulls'))
+      .reply(200, testPull);
+    nock(githubUrl)
+      .persist()
+      .get(uri => uri.includes('/repos/test_owner/test_name/pulls'))
+      .reply(404, 'Not Found');
+
+    await expect(
+      getPullRequests('test_owner', 'test_name')
+    ).rejects.toThrowError(new HttpException(404, 'Not Found'));
+  });
+
+  it('results in an error when github indicates user is unauthorized', async () => {
     nock(githubUrl)
       .get('/repos/test_owner/test_name/pulls?state=open')
       .reply(403, {message: 'Forbidden'});

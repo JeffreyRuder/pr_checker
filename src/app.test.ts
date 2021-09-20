@@ -42,7 +42,7 @@ describe('/pull_requests', () => {
     expect(response.body).toEqual(testData);
   });
 
-  it('should respond 404 when calls to GitHub result in a 404 error ', async () => {
+  it('should respond 404 when calls to github result in a 404 error ', async () => {
     mockGH.mockImplementationOnce(() => {
       throw new HttpException(404, 'not found');
     });
