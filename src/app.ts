@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import gitUrlParse from 'git-url-parse';
 
 import {HttpException} from './exceptions/exceptions';
-import {pullRequests} from './pull_requests';
+import {getPullRequests} from './pull_requests';
 
 const app = express();
 
@@ -12,8 +12,8 @@ app.use(json());
 app.get(
   '/pull_requests/owner/:owner/name/:name',
   asyncHandler(async (req, res) => {
-    await pullRequests(req.params.owner, req.params.name);
-    res.status(200).send('accepted');
+    const data = await getPullRequests(req.params.owner, req.params.name);
+    res.status(200).json(data);
   })
 );
 
@@ -33,8 +33,8 @@ app.post(
       throw new HttpException(400, 'unable to read repository owner or name');
     }
 
-    await pullRequests(owner, name);
-    res.status(200).send('accepted');
+    const prData = await getPullRequests(owner, name);
+    res.status(200).json(prData);
   })
 );
 

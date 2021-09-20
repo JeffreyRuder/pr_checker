@@ -3,6 +3,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "outDir": "build",
+    "resolveJsonModule": true,
     "rootDir": "."
   },
   "include": [
