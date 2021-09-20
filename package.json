@@ -34,6 +34,7 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "git-url-parse": "^11.6.0",
+    "superagent": "^6.1.0",
     "supertest": "^6.1.6"
   }
 }

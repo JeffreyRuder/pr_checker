@@ -12,8 +12,9 @@ app.use(json());
 app.get(
   '/pull_requests/owner/:owner/name/:name',
   asyncHandler(async (req, res) => {
-    await pullRequests(req.params.owner, req.params.name);
-    res.status(200).send('accepted');
+    console.log('in handler');
+    const prData = await pullRequests(req.params.owner, req.params.name);
+    res.status(200).json(prData);
   })
 );
 
@@ -33,8 +34,8 @@ app.post(
       throw new HttpException(400, 'unable to read repository owner or name');
     }
 
-    await pullRequests(owner, name);
-    res.status(200).send('accepted');
+    const prData = await pullRequests(owner, name);
+    res.status(200).json(prData);
   })
 );
 
@@ -51,6 +52,7 @@ app.use((req, res) => {
 app.use(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (err: HttpException, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
     const status = err.status || 500;
     res.status(status);
     res.send(err.message || 'internal server error');
